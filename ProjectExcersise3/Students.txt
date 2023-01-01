@@ -1,0 +1,9 @@
+123 miri scheib 1 50 70 55 70 
+124 amir scheib 2 60 50 88 90 
+125 esraa khalil 3 80 90 60 80 
+126 miri scheib 1 50 22 31 70 
+127 amir scheib 2 60 50 88 90 
+128 esraa khalil 3 80 90 2 80 
+129 miri scheib 1 50 8 55 20 
+130 amir scheib 2 60 50 88 90 
+131 esraa khalil 3 80 2 60 80 
