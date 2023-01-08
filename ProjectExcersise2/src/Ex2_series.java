@@ -7,8 +7,7 @@ public class Ex2_series {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		
-		
-		
+		System.out.println();
 		System.out.println("The point of mathemetical series is to approximate a non polynomial function");
 		System.out.println("by using an infinite series polynomial expression");
 		System.out.println("In theory the accuracy increases with increase in number of terms calculated");
@@ -21,10 +20,8 @@ public class Ex2_series {
 		System.out.println("3.Taylor series");
 		System.out.println("4.Collatz conjecture");
 		System.out.println("5.Power series");
-		System.out.println("6.PI using Leibniz formula");
-		
-		
-		System.out.println("8.exit");
+		System.out.println("6.Approximate PI using Leibniz formula");
+		System.out.println("7.exit");
 		
 		int option;
 		char sums_or_all; // used to decide if functions print out all terms and the sum or just the sum
@@ -32,7 +29,7 @@ public class Ex2_series {
 		int x; // value to start some series from
 		
 		do {
-			System.out.println("Show all terms(Y or N)");
+			System.out.println("\nShow all terms(Y or N)");
 			sums_or_all = scan.next().charAt(0);
 			System.out.println("Choose from the menu");
 			option = scan.nextInt();
@@ -50,10 +47,10 @@ public class Ex2_series {
 				Arithmetic(n, a, d, sums_or_all);
 				break;
 			case 2:
-				System.out.println("every number is the sum of the 2 precious numbers");
+				System.out.println("every number is the sum of the 2 previous numbers");
 				System.out.println("Starts at 0 1");
 				System.out.println();
-				System.out.println("Enter number of tersm");
+				System.out.println("Enter number of terms");
 				n = scan.nextInt();
 				Fibonacci(n, sums_or_all);
 				break;
@@ -91,28 +88,26 @@ public class Ex2_series {
 				Power(n, x,sums_or_all);
 				break;
 			case 6:
+				System.out.println("Enter the number of terms to calculate PI");
 				n = scan.nextInt();
 				PI(n, sums_or_all);
 				break;
-			case 8:
+			case 7:
 				return;
 			default:
 				System.out.println("Invalid option");
 				break;
 			}
-		}while(option != 5);
+		}while(option != 7);
 			
 			
 }
 		
-	public static int Factorial(int num) {	//method to return the factorial of a given number (num!)
-		
-		  int fact=1;  
-		     
+	public static int Factorial(int num) {	//method to return the factorial of a given number (num!)	
+
+		  int fact=1;  		     
 		  for(int i=1; i <= num ;i++) { 
-			  
 		      fact=fact*i;  
-		      
 		  }    
 		  return fact;
 	}  
@@ -141,6 +136,7 @@ public class Ex2_series {
 		 int num2 = 1;
 		 int num3;
 		 int sum = 1;
+		 System.out.print(0 + " ");
 		 for(int i = 2; i <= n; i++) {
 			 
 			 	num3 = num1 + num2;
@@ -153,16 +149,11 @@ public class Ex2_series {
 			 	sum += num3;
 			 
 			}
-		System.out.printf("\nsum = %d", sum);
-		
-		
+		System.out.printf("\nsum = %d", sum);	
 	}
 	
 	public static void Taylor(int n, double x, int type, char op) { //estimate the value of a function using a near identical polynomial function
-		
-		
-		
-		
+
 		switch(type){
 		case 1: // e^x
 			
@@ -193,8 +184,7 @@ public class Ex2_series {
 			System.out.println(sum_sin);
 			break;
 		case 3: //cos(x)
-			
-			
+
 			double sum_cos = 0;
 			for(int i = 0; i <= n; i++) {
 				//print out each step according to user decision
@@ -202,13 +192,9 @@ public class Ex2_series {
 					System.out.println("Steps " + (i + 1) + ": " + ((Math.pow(-1, i) * Math.pow(x, (2 * i)))/Factorial((2 * i))) );
 				}
 				sum_cos += ((Math.pow(-1, i) * Math.pow(x, (2 * i)))/Factorial((2 * i)));
-				
 			}
 			System.out.println(sum_cos);	
-			
 			break;
-		
-		
 		}
 		
 	}
@@ -248,16 +234,11 @@ public class Ex2_series {
 	    	}
 	      sum += Math.pow(x, i) / Factorial(i);
 	    }
-
 	    // Print the result
-	    System.out.println("Sum of power series = " + sum);
-	    
+	    System.out.println("Sum of power series = " + sum);  
 	}
 	
 	public static void PI(int n, char op) {
-		
-	    
-	    
 
 	    // Initialize the sum to 0
 	    double sum = 0.0;
@@ -266,7 +247,9 @@ public class Ex2_series {
 	    for (int i = 0; i < n; i++) {
 	      // Calculate the term
 	      double term = 4.0 * Math.pow(-1, i) / (2 * i + 1);
-
+		if (op == 'y' || op == 'Y') {
+			System.out.println("Step " + (i + 1) + ": " + term + " ");
+		}
 	      // Add the term to the sum
 	      sum += term;
 	    }
@@ -275,12 +258,3 @@ public class Ex2_series {
 	    System.out.println("Approximation of PI: " + sum);
 	  }
 }
-	
-	
-	
-	
-	
-
-
-
-

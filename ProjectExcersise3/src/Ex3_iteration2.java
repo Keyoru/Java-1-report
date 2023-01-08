@@ -1,15 +1,13 @@
 
-
 import java.io.*;
 import java.util.*;
 
 
 public class Ex3_iteration2 {
+
 	static File students = new File("Students.txt");
 	static Scanner scan = new Scanner(System.in);
-	static int count = 0;
-	//an array to store the student objects
- 
+	static int count = 9; //count of how many students user inputs into the file
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
@@ -17,14 +15,16 @@ public class Ex3_iteration2 {
 		Scanner input = new Scanner(students);
 		Scanner scan = new Scanner(System.in);
 			
-		input();
+		//input();
+		Student[] students_array = new Student[count];//student array initialized with count from input() method
+		into_array(students_array);
 		
 		System.out.println("Choose from the following menu:");
 		System.out.println("1.Display grades of specific student(input ID)");
 		System.out.println("2.Calculate Average of the final exam, and highest and lowest final exam grade for specific type(input type)");
 		System.out.println("3.Display number of students passed and failed from each type");
 		System.out.println("4.Exit");
-
+		
 		int choice;
 		do {
 			choice = scan.nextInt();
@@ -32,7 +32,8 @@ public class Ex3_iteration2 {
 			case 1:
 				System.out.println("Input student ID: ");
 				int id = scan.nextInt();
-				if(grades(id) >= count) {
+				if(grades(id, students_array) > count) { 	//if the returned value(int tries in method) 
+															//is greater than count, that means no such ID exists
 					System.out.println("no student with this ID has been found");
 					break;
 				}else
@@ -41,18 +42,16 @@ public class Ex3_iteration2 {
 			case 2:
 				System.out.println("Choose type (1 = Science, 2 = Math, and 3 = English))");
 				int type = scan.nextInt();
-				Final_average(type);
+				Final_average(type, students_array);
 				break;
 			case 3:
-				passed_failed();
+				passed_failed(students_array);
 				break;
 			default:
 				System.out.println("Invalid input, please choose from the menu");
 				break;
 		}
 		}while(choice != 4);
-		
-		
 	}
 	
 	
@@ -60,19 +59,15 @@ public class Ex3_iteration2 {
 	public static void input(){
 		
 		System.out.println("Input student information in the form of");
-		
-		
 		PrintStream out;
 		try {
 			out = new PrintStream(students);
 			
 			char contin = 'y';
 			while(true){
-				
 				System.out.println("ID/First name/Last name/ Type(1, 2, 3)/ Grades(Mid term/ Final exam/ Research paper/ Presentation)");
 				String user_input = scan.nextLine();
 				out.println(user_input);
-				
 				
 				count++;
 
@@ -81,82 +76,70 @@ public class Ex3_iteration2 {
 
 			   if(c.equalsIgnoreCase("n")){ 
 			      break;
-			     }//else continue to loop on any string ;-)
-
+			     }//else continue to loop on any string 
 			}
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		Student[] students_array = new Student[count];
-		
 		System.out.println("Count = " + count);
 		
 	}
 	
-	
-	
-	public static int grades(int ID) throws FileNotFoundException {
-		
-
+	//method to fill the Student object array from the selected file
+	public static void into_array(Student[] arr)throws FileNotFoundException{
 		Scanner input = new Scanner(students);
 		
-		int tries = 0;
-		
 		for(int i = 0; i < count; i++) {
+			//use a scanner for each line for simplicity
 			String Line = input.nextLine();
 			Scanner Line_input = new Scanner(Line);
+
+			int id = Line_input.nextInt();
+			String fname = Line_input.next();
+			String lname = Line_input.next();
+			int type = Line_input.nextInt();
 			
+			double midterm = Line_input.nextDouble();
+			double finalexam = Line_input.nextDouble();
+			double paper = Line_input.nextDouble();
+			double presentation = Line_input.nextDouble();
 			
-			if(Line_input.nextInt() == ID) {
-				
-				//empty .next() functions to skip the name and type
-				Line_input.next();
-				Line_input.next();
-				Line_input.next();
-				
-				double midterm = Line_input.nextDouble();
-				double finalexam = Line_input.nextDouble();
-				double paper = Line_input.nextDouble();
-				double presentation = Line_input.nextDouble();
-				
-				System.out.println("Mid term grade: " + midterm);
-				System.out.println("Final exam grade: " + finalexam);
-				System.out.println("Research paper grade: " + paper);
-				System.out.println("Presentation grade: " + presentation);
-				System.out.println("Final grade: " + ((midterm + finalexam + paper + presentation)/4) );
-			}else tries++;
-			
-			
+			//create the new object in array at each index
+			arr[i] = new Student(id, fname, lname, type, midterm, finalexam, paper, presentation);
+			}	
 		}
 		
+	
+	
+	public static int grades(int ID, Student[] arr) throws FileNotFoundException {
+
+		int tries = 0; //tries integer used in identifying whether the selected ID is present in the file or not
+		for(int i = 0; i <= count; i++) {
+			if(arr[i].getID() == ID) {
+				System.out.println("Mid term grade: " + arr[i].getMidterm());
+				System.out.println("Final exam grade: " + arr[i].getFinal_exam());
+				System.out.println("Research paper grade: " + arr[i].Research_paper);
+				System.out.println("Presentation grade: " + arr[i].getPresentation());
+				System.out.println("Final grade: " + ((arr[i].getMidterm() + arr[i].getFinal_exam() + arr[i].getResearch_paper() 
+						+ arr[i].getPresentation())/4) );
+				break;
+			}else tries++;
+		}
 		return tries;
 	}
 	
-	public static void Final_average(int type) throws FileNotFoundException {
+	
+	public static void Final_average(int type, Student[] arr) throws FileNotFoundException {
 		double sum = 0;
 		double highest_final = 0;
 		double lowest_final = 100;
-		Scanner input = new Scanner(students);
 		for(int i = 0; i < count; i++) {
 			
-			//read each line at a time for simplicity
-			String Line = input.nextLine();
-			Scanner Line_input = new Scanner(Line);
-			
-			//empty .next() functions to skip the id and name
-			Line_input.next();
-			Line_input.next();
-			Line_input.next();
-			
-			//check if type token corresponds 
-			if(Line_input.nextInt() == type) {
-				
-				Line_input.nextDouble(); //skip midterm grade
-				
-				double finalexam = Line_input.nextDouble();
+			if(arr[i].getType() == type) {
+
+				double finalexam = arr[i].getFinal_exam();
 				if(highest_final < finalexam) highest_final = finalexam;
 				else if (lowest_final > finalexam) lowest_final = finalexam;
 				
@@ -172,8 +155,8 @@ public class Ex3_iteration2 {
 		System.out.println("final exam average: " + average_finalexam);
 	}
 	
-	public static void passed_failed() throws FileNotFoundException {
-		Scanner input = new Scanner(students);
+	public static void passed_failed(Student[] arr) throws FileNotFoundException {
+
 		
 		
 		
@@ -181,26 +164,17 @@ public class Ex3_iteration2 {
 		int type;
 		
 		for(int i = 0; i < count; i++) {
+
 			
-			//read each line at a time for simplicity
-			String Line = input.nextLine();
-			Scanner Line_input = new Scanner(Line);
-			
-			//empty .next() functions to skip the id and name
-			Line_input.next();
-			Line_input.next();
-			Line_input.next();
-			type = Line_input.nextInt() - 1;
-			
-			double midterm = Line_input.nextDouble();
-			double finalexam = Line_input.nextDouble();
-			double paper = Line_input.nextDouble();
-			double presentation = Line_input.nextDouble();
+			double midterm = arr[i].getMidterm();
+			double finalexam = arr[i].getFinal_exam();
+			double paper = arr[i].getResearch_paper();
+			double presentation = arr[i].getPresentation();
 			double average = (midterm + finalexam + paper + presentation)/4;
 			
 			if(average >= 60) {
-				array[0][type] ++;
-			}else array[1][type] ++;
+				array[0][arr[i].getType()-1] ++;
+			}else array[1][arr[i].getType()-1] ++;
 			
 		}
 		
@@ -222,7 +196,6 @@ public class Ex3_iteration2 {
 			}
 			System.out.println();
 		}
-		
 	}
 }
 
